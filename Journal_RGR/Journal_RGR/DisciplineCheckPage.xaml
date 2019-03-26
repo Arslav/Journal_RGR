@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:i="clr-namespace:Plugin.InputKit.Shared.Controls;assembly=Plugin.InputKit"
+             x:Class="Journal_RGR.DisciplineCheckPage"
+             Appearing="ContentPage_Appearing">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition />
+            
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <Label Grid.Row="1">Преподаватель:</Label>
+        <Label Grid.Row="1" Grid.Column="1" x:Name="TeacherLabel" Text="Гвоздев В.Е." FontAttributes="Bold"/>
+
+        <Label Grid.Row="2">Семестр:</Label>
+        <Label Grid.Row="2" Grid.Column="1" x:Name="SemesterLabel" Text="8" FontAttributes="Bold"/>
+
+        <Label Grid.Row="3">Тип:</Label>
+        <Label Grid.Row="3" Grid.Column="1" x:Name="TypeLabel" Text="Экзамен" FontAttributes="Bold"/>
+
+        <ScrollView x:Name="TableScrollView" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Both" HorizontalOptions="Fill"/>
+    </Grid>
+</ContentPage>

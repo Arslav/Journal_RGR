@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Journal_RGR.CheckListPage"
+             Title="Добавить запись"
+             Appearing="ContentPage_Appearing">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        
+        <Label Grid.Row="1">Дата:</Label>
+        <DatePicker Grid.Row="1" Grid.Column="1" Format="dd.MM.yyyy" x:Name="DatePicker"/>
+
+        <Label Grid.Row="2">Семестр:</Label>
+        <Picker Grid.Row="2" Grid.Column="1" x:Name="SemesterPicker" SelectedIndexChanged="SemesterPicker_SelectedIndexChanged"/>
+
+        <Label Grid.Row="3">Дисциплина:</Label>
+        <Picker Grid.Row="3" Grid.Column="1" x:Name="DisciplinePicker" ItemDisplayBinding="{Binding Name}"/>
+
+        <ScrollView Grid.Row="4" Grid.ColumnSpan="2">
+            <StackLayout x:Name="JournalStackLayout"/>
+        </ScrollView>
+
+        <StackLayout Grid.Row="5" Grid.ColumnSpan="2" HorizontalOptions="Center" Orientation="Horizontal">
+            <Button Text="Удалить" x:Name="DeleteButton" Clicked="DeleteButton_Clicked" IsVisible="False"/>
+            <Button Text="Сохранить" x:Name="SaveButton" Clicked="SaveButton_Clicked" Padding="10,0"/>
+        </StackLayout>
+    </Grid>
+</ContentPage>

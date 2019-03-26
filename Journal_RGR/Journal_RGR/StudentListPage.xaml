@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Journal_RGR.StudentListPage"
+             xmlns:vc="clr-namespace:Journal_RGR.ViewCells"
+             Title="Студенты" Appearing="ContentPage_Appearing">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <ListView x:Name="StudentListView"
+                ItemsSource="{Binding Items}" 
+                CachingStrategy="RecycleElement">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <vc:StudentViewCell Index="{Binding Id}" Name="{Binding Name}"/>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <StackLayout Grid.Row="1" HorizontalOptions="Center">
+            <Button Text="Добавить" Padding="10,0" x:Name="AddButton" Clicked="AddButton_Clicked"/>
+        </StackLayout>
+    </Grid> 
+</ContentPage>

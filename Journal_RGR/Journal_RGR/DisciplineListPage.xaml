@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vc="clr-namespace:Journal_RGR.ViewCells"
+             x:Class="Journal_RGR.DisciplineListPage"
+             Appearing="UpdateEvent"
+             Title="Дисциплины">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition />
+            <RowDefinition  Height="auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="0.5*"/>
+        </Grid.ColumnDefinitions>
+        <Label VerticalTextAlignment="Center" HorizontalTextAlignment="Center">Семестр</Label>
+        <Picker Grid.Column="1" x:Name="SemesterPicker" SelectedIndexChanged="UpdateEvent"/>
+        <ListView Grid.Row="1" Grid.ColumnSpan="2" x:Name="DisciplineListView"
+                    ItemsSource="{Binding Items}"
+                    ItemTapped="DisciplineListView_ItemTapped"
+                    CachingStrategy="RecycleElement">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <vc:DisciplineViewCell Index="{Binding Id}" Name="{Binding Name}"/>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <StackLayout Grid.Row="2" Grid.ColumnSpan="2" HorizontalOptions="Center">
+            <Button Text="Добавить" x:Name="AddButton" Clicked="AddButton_Clicked"/>
+        </StackLayout>
+    </Grid>
+</ContentPage>
