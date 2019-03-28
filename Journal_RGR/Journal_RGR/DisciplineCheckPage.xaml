@@ -11,7 +11,7 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition />
-            
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"/>
@@ -27,6 +27,9 @@
         <Label Grid.Row="3">Тип:</Label>
         <Label Grid.Row="3" Grid.Column="1" x:Name="TypeLabel" Text="Экзамен" FontAttributes="Bold"/>
 
-        <ScrollView x:Name="TableScrollView" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Both" HorizontalOptions="Fill"/>
+        <ScrollView x:Name="TableScrollView" Grid.Row="4" Grid.ColumnSpan="2" Orientation="Both" HorizontalOptions="Fill"/>
+        <StackLayout Grid.Row="5" Grid.ColumnSpan="2" HorizontalOptions="CenterAndExpand">
+            <Button x:Name="AddButton" Text="Добавить" Clicked="AddButton_Clicked" Padding="10,0"/>
+        </StackLayout>
     </Grid>
 </ContentPage>

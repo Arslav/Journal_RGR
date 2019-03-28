@@ -33,21 +33,23 @@ namespace Journal_RGR.ViewCells
             {
                 ColumnDefinitions = new ColumnDefinitionCollection
                 {
-                    new ColumnDefinition { Width = new GridLength(4, GridUnitType.Star) },
-                    new ColumnDefinition { Width = new GridLength(0.3, GridUnitType.Star) }
+                    new ColumnDefinition(),
+                    new ColumnDefinition { Width = new GridLength(30,GridUnitType.Absolute) }
                 }
             };
-            var button = new Button
-            {
-                Text = "E"
+            var image = new Image {
+                Source = ImageSource.FromFile("PencilIcon"),
+                Margin = new Thickness(5)
             };
+            var tapGesture = new TapGestureRecognizer();
+            tapGesture.Tapped += TapGesture_Tapped;
+            image.GestureRecognizers.Add(tapGesture);
             grid.Children.Add(_nameLabel, 0, 0);
-            grid.Children.Add(button, 1, 0);
-            button.Clicked += Button_Clicked;
+            grid.Children.Add(image, 1, 0);
             View = grid;
         }
 
-        private void Button_Clicked(object sender, EventArgs e)
+        private void TapGesture_Tapped(object sender, EventArgs e)
         {
             var discipline = App.DB.Disciplines.Where(s => s.Id == Index).First();
             App.Navigate(new DisciplineEditorPage(discipline));

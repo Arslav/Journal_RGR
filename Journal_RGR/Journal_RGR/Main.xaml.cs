@@ -23,6 +23,7 @@ namespace Journal_RGR
             if (!(e.SelectedItem is MenuItem item)) return;
             Detail = new NavigationPage(item.Page);
             MasterPage.ListView.SelectedItem = null;
+            MasterPage.Unfocus();
         }
     }
 }

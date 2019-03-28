@@ -25,6 +25,11 @@ namespace Journal_RGR
             InitializeComponent();
         }
 
+        public CheckListPage(Discipline discipline) : this()
+        {
+            _discipline = discipline;
+        }
+
         public CheckListPage(DateTime dateTime, Discipline discipline) : this()
         {
             _dateTime = dateTime;
@@ -33,10 +38,16 @@ namespace Journal_RGR
             Title = "Редактировать запись";
         }
 
-        private void UpdateSemesterPicker()
+        private async void UpdateSemesterPicker()
         {
             var semesters = new List<string>();
             var disciplines = App.DB.Disciplines.ToList();
+            if (disciplines.Count == 0)
+            {
+                var result = await DisplayAlert("Предупреждение", "В базе не найдены дисциплины, перейти к созданию?", "Да", "Нет");
+                if (result) App.Page.Detail = new DisciplineListPage();
+                return;
+            }
             foreach (var item in disciplines)
             {
                 var add_flag = true;
@@ -70,59 +81,94 @@ namespace Journal_RGR
 
         private async void SaveButton_Clicked(object sender, EventArgs e)
         {
-            //TODO: сделать валидацию
-            var discipline = (DisciplinePicker.SelectedItem as Discipline);
-            var datetime = DatePicker.Date;
-            var count = App.DB.Journals.Where(j => j.DisciplineId == discipline.Id).Count(j => (datetime >= j.DateTime));
-            if (count > 0)
-            {
-                var max_date = App.DB.Journals.Where(j => j.DisciplineId == discipline.Id).Max(j => j.DateTime);
-                datetime = max_date.AddMilliseconds(1);
-            }
-
             foreach(StudentCheckView item in JournalStackLayout.Children)
             {
-                //TODO: выбирать студента, а не искать по индексу
                 var student = App.DB.Students.First(s => s.Id == item.Index);
-                var journal = new Journal
+                if (!update_flag)
                 {
-                    StudentId = student.Id,
-                    Student = student,
-                    DateTime = datetime,
-                    DisciplineId = discipline.Id,
-                    Discipline = discipline,
-                    Check = item.IsChecked,
-                };
-                App.DB.Journals.Add(journal);
+                    var discipline = (DisciplinePicker.SelectedItem as Discipline);
+                    if(discipline == null)
+                    {
+                        await DisplayAlert("Ошибка!", "Выберите дисциплину!", "ОК");
+                        return;
+                    }
+                    var datetime = DatePicker.Date;
+                    var count = App.DB.Journals.Where(j => j.DisciplineId == discipline.Id).Count(j => (datetime >= j.DateTime));
+                    if (count > 0)
+                    {
+                        var max_date = App.DB.Journals.Where(j => j.DisciplineId == discipline.Id).Max(j => j.DateTime);
+                        datetime = max_date.AddMilliseconds(1);
+                    }
+                    var journal = new Journal
+                    {
+                        StudentId = student.Id,
+                        Student = student,
+                        DateTime = datetime,
+                        DisciplineId = discipline.Id,
+                        Discipline = discipline,
+                        Check = item.IsChecked,
+                    };
+                    App.DB.Journals.Add(journal);
+                    
+                }
+                else
+                {
+                    var journal = App.DB.Journals.SingleOrDefault(j => j.StudentId == student.Id && j.Discipline == _discipline && j.DateTime == _dateTime);
+                    if (journal == null)
+                    {
+                        journal = new Journal
+                        {
+                            StudentId = student.Id,
+                            Student = student,
+                            DateTime = _dateTime,
+                            DisciplineId = _discipline.Id,
+                            Discipline = _discipline,
+                            Check = item.IsChecked,
+                        };
+                        App.DB.Journals.Add(journal);
+                    }
+                    else
+                    {
+                        journal.Check = item.IsChecked;
+                    }
+                }
             }
             App.DB.SaveChanges();
-            await DisplayAlert("Успех!", "Запись успешно сохранена", "ОК");
+            if (update_flag) App.Back();
+            else await DisplayAlert("Успех!", "Запись успешно сохранена", "ОК");
+          
         }
 
-        private void ContentPage_Appearing(object sender, EventArgs e)
+        private async void ContentPage_Appearing(object sender, EventArgs e)
         {
-            var students = App.DB.Students.ToList();
+            var students = App.DB.Students.OrderBy(s => s.Name).ToList();
+            if(students.Count == 0)
+            {
+                var result = await DisplayAlert("Предупреждение", "В базе не найдены студенты, перейти к созданию?", "Да","Нет");
+                if (result) App.Page.Detail = new StudentListPage();
+            }
             JournalStackLayout.Children.Clear();
             foreach (var item in students)
             {
                 JournalStackLayout.Children.Add(new StudentCheckView
                 {
-                    Index = item.Id, //TODO: хранить студента, а не его индекс
+                    Index = item.Id,
                     Name = item.Name
                 });
             }
             UpdateSemesterPicker();
+            if(_discipline != null)
+            {
+                SemesterPicker.SelectedItem = _discipline.Semester.ToString();
+                DisciplinePicker.SelectedItem = _discipline;
+            }
             if(update_flag)
             {
-                
                 DeleteButton.IsVisible = true;
                 SemesterPicker.IsEnabled = false;
                 DisciplinePicker.IsEnabled = false;
                 DatePicker.IsEnabled = false;
-                SemesterPicker.SelectedItem = _discipline.Semester.ToString();
-                DisciplinePicker.SelectedItem = _discipline;
                 DatePicker.Date = _dateTime;
-
                 var journal = App.DB.Journals.Where(r => r.DisciplineId == _discipline.Id && r.DateTime == _dateTime).ToList();
                 foreach (StudentCheckView item in JournalStackLayout.Children)
                 {
@@ -137,9 +183,16 @@ namespace Journal_RGR
             }
         }
 
-        private void DeleteButton_Clicked(object sender, EventArgs e)
+        private async void DeleteButton_Clicked(object sender, EventArgs e)
         {
-
+            var result = await DisplayAlert("Удаление", "Вы уверены что хотите удалить запись?", "Да", "Нет");
+            if (result)
+            {
+                var journal = App.DB.Journals.Where(r => r.DisciplineId == _discipline.Id && r.DateTime == _dateTime).ToList();
+                App.DB.Journals.RemoveRange(journal);
+                App.DB.SaveChanges();
+                App.Back();
+            }
         }
     }
 }

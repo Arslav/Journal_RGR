@@ -32,7 +32,7 @@ namespace Journal_RGR
 
         private void ContentPage_Appearing(object sender, EventArgs e)
         {
-            var list = App.DB.Students.ToList();
+            var list = App.DB.Students.OrderBy(s => s.Name).ToList();
             StudentListView.ItemsSource = null;
             StudentListView.ItemsSource = list;
         }

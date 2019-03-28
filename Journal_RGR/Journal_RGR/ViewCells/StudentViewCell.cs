@@ -39,21 +39,24 @@ namespace Journal_RGR.ViewCells
             {
                 ColumnDefinitions = new ColumnDefinitionCollection
                 {
-                    new ColumnDefinition { Width = new GridLength(0.3, GridUnitType.Star) },
-                    new ColumnDefinition { Width = new GridLength(3, GridUnitType.Star) },
-                    new ColumnDefinition { Width = new GridLength(0.3, GridUnitType.Star) }
+                    new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) },
+                    new ColumnDefinition { Width = new GridLength(30, GridUnitType.Absolute) }
                 }
             };
-            var _editButton = new Button { Text = "E" };
-            grid.Children.Add(_indexLabel, 0, 0);
-            grid.Children.Add(_nameLabel, 1, 0);
-            grid.Children.Add(_editButton, 2, 0);
-            _editButton.Clicked += EditButton_Clicked;
+            var image = new Image
+            {
+                Source = ImageSource.FromFile("PencilIcon"),
+                Margin = new Thickness(5)
+            };
+            var tapGesture = new TapGestureRecognizer();
+            tapGesture.Tapped += TapGesture_Tapped;
+            image.GestureRecognizers.Add(tapGesture);
+            grid.Children.Add(_nameLabel, 0, 0);
+            grid.Children.Add(image, 1, 0);
             View = grid;
-
         }
 
-        private void EditButton_Clicked(object sender, EventArgs e)
+        private void TapGesture_Tapped(object sender, EventArgs e)
         {
             var student = App.DB.Students.Where(s => s.Id == Index).First();
             App.Navigate(new StudentEditorPage(student));

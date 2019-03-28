@@ -20,7 +20,6 @@ namespace Journal_RGR
 
         private void UpdateSemesterPicker()
         {
-            //TODO: Подумать как избавиться от дублирования кода (см. CheckListPage.xaml.cs)
             var semesters = new List<string>(); 
             var disciplines = App.DB.Disciplines.ToList();
             foreach (var item in disciplines)

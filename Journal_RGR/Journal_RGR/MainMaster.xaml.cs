@@ -33,11 +33,9 @@ namespace Journal_RGR
             {
                 MenuItems = new ObservableCollection<MenuItem>(new[]
                 {
-                    new MenuItem { Title = "Главная", Page = new MainDetail() },
-                    new MenuItem { Title = "Студенты", Page = new StudentListPage() },
-                    new MenuItem { Title = "Дисциплины", Page = new DisciplineListPage() },
-                    new MenuItem { Title = "Журнал", Page = new CheckListPage() },
-                 //   new MenuItem { Title = "Тест", Page = new DisciplineCheckPage() },
+                    new MenuItem("Дисциплины", new DisciplineListPage(), "BooksIcon" ),
+                    new MenuItem("Студенты", new StudentListPage(), "PeopleIcon"),
+                    new MenuItem("Добавить запись", new CheckListPage(), "JournalIcon"),
                 });
             }
 
